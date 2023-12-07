@@ -70,17 +70,30 @@ def get_axis_cut(ev, x1, x2, theta, r_max):
     
     return np.append(cut1, cut2)
 
-def stack_axes(major_cuts, minor_cuts, dist):
+def stack_axes(dists_full, dists_maj, dists_min):
     '''
     This function takes in all major and minor axis cuts, and returns them all in one. 
     This will include their functions of distance so they can be properly binned .
     
     Parameters
-    -- dist: Dictionary of all the differences in positions to be used by halo ID
-    -- major_cuts: Dictionary of all the major axis pizza slices
-    -- minor_cuts: Dictionary of all the minor axis pizza slices
+    -- dists: Dictionaries of all the distances either along the major/minor slices or of all
+    
+    Returns
+    
+    -- stacked_maj, stacked_min: Distances of halos from center along major/minor axis (stacked)
+    -- stacked_full: stacked distances of all halos for radial binning
     '''
     
-    return None
+    keys = major_cuts.keys()
+    
+    stacked_full = np.array([])
+    stacked_maj = np.array([])
+    stacked_min = np.array([])
+    for key in keys:
+        stacked_full = np.append(stacked_full, dists_full)
+        stacked_maj = np.append(stacked_maj, dists_maj[key])
+        stacked_min = np.append(stacked_min, dists_min[key])
+    
+    return stacked_maj, stacked_min, stacked_full
     
     
