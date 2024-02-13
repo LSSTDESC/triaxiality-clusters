@@ -70,13 +70,14 @@ def get_axis_cut(ev, x1, x2, theta, r_max):
     
     return np.append(cut1, cut2)
 
-def stack_axes(dists_full, dists_maj, dists_min):
+def stack_axes(dists_full_x1, dists_full_x2, maj_cut, min_cut):
     '''
     This function takes in all major and minor axis cuts, and returns them all in one. 
     This will include their functions of distance so they can be properly binned .
     
     Parameters
-    -- dists: Dictionaries of all the distances either along the major/minor slices or of all
+    -- dists: dictionary of all the distances either along the major/minor slices or of all as x1, x2 tuples
+    -- major_cuts, minor_cuts: The cuts of the index locations 
     
     Returns
     
@@ -84,16 +85,27 @@ def stack_axes(dists_full, dists_maj, dists_min):
     -- stacked_full: stacked distances of all halos for radial binning
     '''
     
-    keys = major_cuts.keys()
+    stacked_full_x1 = np.array([])
+    stacked_full_x2 = np.array([])
     
-    stacked_full = np.array([])
-    stacked_maj = np.array([])
-    stacked_min = np.array([])
+    stacked_maj_x1 = np.array([])
+    stacked_maj_x2 = np.array([])
+    
+    stacked_min_x1 = np.array([])
+    stacked_min_x2 = np.array([])
+    
+    keys = dists_full_x1.keys() # keys should e the same for each dictionary
+    
     for key in keys:
-        stacked_full = np.append(stacked_full, dists_full)
-        stacked_maj = np.append(stacked_maj, dists_maj[key])
-        stacked_min = np.append(stacked_min, dists_min[key])
+        stacked_full_x1 = np.append(stacked_full_x1, dists_full_x1[key])
+        stacked_full_x2 = np.append(stacked_full_x2, dists_full_x2[key])
+        
+        stacked_maj_x1 = np.append(stacked_maj_x1, dists_full_x1[key][maj_cut[key]])
+        stacked_maj_x2 = np.append(stacked_maj_x2, dists_full_x2[key][maj_cut[key]])
+        
+        stacked_min_x1 = np.append(stacked_min_x1, dists_full_x1[key][min_cut[key]])
+        stacked_min_x2 = np.append(stacked_min_x2, dists_full_x2[key][min_cut[key]])
     
-    return stacked_maj, stacked_min, stacked_full
+    return stacked_maj_x1, stacked_maj_x2, stacked_min_x1, stacked_min_x2, stacked_full_x1, stacked_full_x2
     
     

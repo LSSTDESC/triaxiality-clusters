@@ -1,3 +1,7 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.stats as stats
+
 def n_calcs(x1, x2, pm_angle):
     '''
     Calculates the number profiles necessary for the calculations we want, starting with a volume calculation and going into count, density, and delta density

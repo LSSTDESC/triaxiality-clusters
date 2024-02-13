@@ -57,7 +57,13 @@ def select_halos(cat_file, n, min_mass = 0):
     #print(mass_sort[(len(mass_sort)-n):])
     main_index = np.zeros(n)
     for i in range(n):
-        main_index[i] = np.where(data_cent['halo_mass'] == mass_sort[len(mass_sort)-(i+1)])[0]
+        # print(np.where(data_cent['halo_mass'] == mass_sort[len(mass_sort)-(i+1)])[0])
+        vals = np.where(data_cent['halo_mass'] == mass_sort[len(mass_sort)-(i+1)])[0]
+        
+        if len(vals) > 1:
+            main_index[i] = np.where(data_cent['halo_mass'] == mass_sort[len(mass_sort)-(i+1)])[0][0]
+        else:
+             main_index[i] = np.where(data_cent['halo_mass'] == mass_sort[len(mass_sort)-(i+1)])[0]
     
     return data, data_cent, main_index
 
@@ -80,7 +86,7 @@ def lss_cyl_cut(data, main_index, plane='xy', dist_lim=10, h=5):
     ys = data['position_y']
     zs = data['position_z']
     
-    id_halos = data['halo_id'][main_index.astype(int)]
+    id_halos = data['halo_id'][main_index]
     
     cyl_cut = {}
     
@@ -104,3 +110,22 @@ def lss_cyl_cut(data, main_index, plane='xy', dist_lim=10, h=5):
             cyl_cut[id_halos[i]]  = np.where((d <= dist_lim) & ( (xs <= central_xs + h) & (xs >= central_xs - h) ))
         
     return cyl_cut
+
+def cluster_cut(cent, data, main_index, plane='xy'):
+    '''
+    '''
+    
+    id_halos = cent['halo_id'][main_index]
+    
+    cl_cut = {}
+    
+    for i in range(len(id_halos)):
+        # central_xs = data['position_x'][np.where(data['halo_id'] == id_halos[i])]
+        # central_ys = data['position_y'][np.where(data['halo_id'] == id_halos[i])]
+        # central_zs = data['position_z'][np.where(data['halo_id'] == id_halos[i])]
+        
+        cl_cut[id_halos[i]] = np.where(data['halo_id'] == id_halos[i])
+        
+    return cl_cut
+    
+    
